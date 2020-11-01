@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>ABC KERALAM MOCK TEST</title>
+        <style type="text/css" media="all">
+* {
+    font-family: monospace;
+    font-weight: bold;
+    box-sizing: border-box;
+    user-select: none;
+}
+body {
+    margin: 1px; background-color: green;
+    color: black;
+    
+}
+#root {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+.task {
+    width: 300px;
+    max-width: 90%;
+    background: #f4f4f4;
+    padding: 10px;
+    text-align: center;
+    animation: test2 800ms;
+}
+.task_question {
+    margin-top: 40px;
+}
+.task_answers {
+    margin-top: 40px;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(1, 1fr);
+}
+.task_btn {
+    background: white;
+}
+.task_btn:active {
+    background: #d8d8d8;
+}
+.task_submit {
+    margin-top: 40px;
+    display: inline-block;
+    width: 100%;
+    background: #00c800;
+    color: white;
+}
+.task_submit:hover {
+    background: #00a000;
+}
+.task button {
+    border: none;
+    padding: 10px;
+    transition: 200ms background;
+    box-shadow: 1px 1px 4px 1px #b8b8b8;
+    outline: none;
+}
+.task_btn_selected {
+    background: #d8d8d8 !important;
+}
+@keyframes test {
+    to {
+        transform: translate(100vw, 0);
+    }
+}
+.task_result {
+    font-size: 32px;
+    animation: test3 2000ms;
+    color: red;
+}
+.task_result_correct {
+    color: #00c800 !important;
+}
+@keyframes test2 {
+    from {
+        transform: translate(-100vw, 0);
+    }
+    to {
+        transform: translate(0, 0);
+    }
+}
+@keyframes test3 {
+    from {
+        transform: translate(-100vw, 0);
+    }
+    40% {
+        transform: translate(0, 0);
+    }
+    60% {
+        transform: translate(0, 0);
+    }
+    to {
+        transform: translate(100vw, 0);
+    }
+}
+.score {
+    font-size: 30px;
+}
+.title {
+    font-size: 40px;
+}
+.start {
+    margin-top: 40px;
+    display: inline-block;
+    font-size: 20px;
+    color: blue;
+    background-color: lightyellow;
+}
+        </style>
+    </head>
+    <body>
+        <div id="root"></div>
+        <script type="text/javascript" charset="utf-8">
+"use strict";
+const data=[
+    [
+        "What is the quantity of matter an object possesses?",
+        [
+            "Weight",
+            "Volume",
+            "Density",
+            "Mass"
+        ],
+        3
+    ],
+    [
+        "What is electric current measured in?",
+        [
+            "Volts",
+            "Ampers",
+            "Ohms",
+            "Coulombs"
+        ],
+        1
+    ],
+    [
+        "What is defined as work divided by time?",
+        [
+            "Latent heat",
+            "Kinetic energy",
+            "Power",
+            "Force"
+        ],
+        2
+    ],
+    [
+        "What French physicist described the electrostatic force?",
+        [
+            "Bequerel",
+            "Henri Poincare",
+            "Hyppolyte Fizeau",
+            "Coulomb"
+        ],
+        3
+    ],
+    [
+        "The color of visible light spectrum ranges from red to ...?",
+        [
+            "Violet",
+            "Blue",
+            "Yellow",
+            "Green"
+        ],
+        0
+    ],
+    [
+        "What letter represents Boltzmann constant?",
+        [
+            "k",
+            "b",
+            "r",
+            "g"
+        ],
+        0
+    ],
+    [
+        "Which device converts sound to electrical energy?",
+        [
+            "Telegraph",
+            "Oven",
+            "Microphone",
+            "Jackhammer"
+        ],
+        2
+    ],
+    [
+        "Which Italian physicist invented the first electric battery?",
+        [
+            "Francesco Grimaldi",
+            "Gasparo Berti",
+            "Giovani Borelli",
+            "Alessandro Volta"
+        ],
+        3
+    ],
+    [
+        "Your mass is 80 kg. What is your mass on the Moon, in kg?",
+        [
+            "43",
+            "13",
+            "80",
+            "No listed choice"
+        ],
+        2
+    ],
+    [
+        "Object of 1kg is at 3 m height. What is its potential energy?",
+        [
+            "30 J",
+            "15 N",
+            "30 N",
+            "15 J"
+        ],
+        0
+    ],
+    [
+        "What is kinetic energy of a runner (60 kg) moving with constant speed of 3m/s?",
+        [
+            "540 Joules",
+            "360 Joules",
+            "320 Joules",
+            "270 Joules"
+        ],
+        3
+    ]
+];
+let counter=0;
+let score=0;
+
+let root;
+
+class Task {
+constructor(task) {
+    this.question=task[0];
+    this.answers=task[1];
+    this.correct=task[2];
+    this.selected=-1;
+    this.render();
+}
+render() {
+    let container=document.createElement("div");
+    container.classList="task";
+    container.innerHTML+=`<div class="task_question">${this.question}</div>`;
+    let answerBox=document.createElement("div");
+    answerBox.classList="task_answers";
+    this.answers.forEach((a,i)=>{
+        let btn=document.createElement("button");
+        btn.classList="task_btn";
+        btn.innerText=a;
+        btn.onclick=()=>{
+            this.selectAnswer(i);
+        }
+        answerBox.appendChild(btn);
+    });
+    container.appendChild(answerBox);
+    let submitBtn=document.createElement("button");
+    submitBtn.classList="task_submit";
+    submitBtn.innerText="Submit";
+    submitBtn.onclick=()=>{
+        this.submitAnswer();
+    }
+    container.appendChild(submitBtn);
+    render(container,root);
+}
+selectAnswer(idx) {
+    let btn=document.getElementsByClassName("task_btn");
+    for(let i=0;i<btn.length;i++) {
+        if(idx==i) {
+            btn[i].classList.add("task_btn_selected");
+        } else {
+            btn[i].classList.remove("task_btn_selected");
+        }
+    }
+    this.selected=idx;
+}
+submitAnswer() {
+    let isCorrect=this.selected==this.correct;
+    if(isCorrect) score++;
+    let msg=`<div class="task_result ${isCorrect?'task_result_correct':''}">${isCorrect?"Correct!":"Wrong!"}</div>`;
+    setTimeout(()=>{
+        root.innerHTML=msg;
+    },800-10);
+    setTimeout(()=>{
+        (++counter)>=data.length?root.innerHTML=`<div class="score">You scored ${Math.round(score/data.length*100)} %</div>`:new Task(data[counter]);
+    },2800-10);
+    document.querySelector(".task").style.animation="test 800ms";
+}
+}
+
+const render=(el,p)=>{
+    p.innerHTML="";
+    p.appendChild(el);
+}
+
+onload=()=>{
+    root=document.getElementById("root");
+    root.innerHTML=`
+        <div align="center">
+            <div class="title">Physics Mocktest</div>
+            <button class="start">Start</button>
+        </div>
+    `;    document.querySelector(".start").onclick=function() {
+        new Task(data[counter]);
+    }
+}
+        </script>
+        <footer style="position:absolute;bottom:0;right:0;padding:6px;">© abckeralam</footer>
+    </body>
+</html>
